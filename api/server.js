@@ -54,6 +54,10 @@ app.post('/contact', async (req, res) => {
 app.get('/', (req, res) => {
     res.send('¡Hola, mundo!');
 });
+// Ruta de prueba
+app.get('/try', (req, res) => {
+    res.send('Hi');
+});
 
 // Iniciar el servidor
 app.listen(port, async () => {
