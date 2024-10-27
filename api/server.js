@@ -2,7 +2,7 @@ const express = require('express');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 
 const app = express();
-const port = 3000; // Puedes elegir cualquier puerto
+const port = process.env.PORT || 3000; // Cambiar a process.env.PORT
 
 // Middleware para parsear JSON
 app.use(express.json());
@@ -20,9 +20,7 @@ const client = new MongoClient(uri, {
 
 async function connectToMongoDB() {
     try {
-        // Conectar el cliente al servidor
         await client.connect();
-        // Enviar un ping para confirmar una conexión exitosa
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } catch (error) {
@@ -38,7 +36,6 @@ app.post('/contact', async (req, res) => {
     }
 
     try {
-        // Guardar los datos en la base de datos
         const database = client.db("tareaDSI");
         const collection = database.collection("contacts");
         
@@ -50,17 +47,15 @@ app.post('/contact', async (req, res) => {
     }
 });
 
-// Ruta de prueba
 app.get('/', (req, res) => {
     res.send('¡Hola, mundo!');
 });
-// Ruta de prueba
+
 app.get('/try', (req, res) => {
     res.send('Hi');
 });
 
-// Iniciar el servidor
-app.listen(port, async () => {
-    await connectToMongoDB(); // Conectar a MongoDB cuando el servidor inicie
-    console.log(`Servidor escuchando en http://localhost:${port}`);
-});
+// Exportar la aplicación para que Vercel pueda usarla
+module.exports = app; 
+
+// No inicies el servidor directamente aquí para que funcione en Vercel
