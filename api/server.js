@@ -16,7 +16,7 @@ app.use(
 app.use(express.json());
 
 const uri =
-  "mongodb+srv://farid:emerc0d@cluster0.sguno.mongodb.net/tareaDSI?retryWrites=true&w=majority&appName=Cluster0";
+  "mongodb+srv://farid:emerc0d@cluster0.sguno.mongodb.net/tareaDSI?retryWrites=true&w=majority&appName=Cluster0&tls=true";
 let client;
 let isConnected = false;
 
