@@ -44,29 +44,30 @@ async function connectToMongoDB() {
   }
 }
 
-app.post("/contact", async (req, res) => {
+app.post('/contact', async (req, res) => {
   try {
-    await connectToMongoDB(); // Asegúrate de que la conexión esté activa
+      await connectToMongoDB();
 
-    const { nombreCompleto, correo, mensaje } = req.body;
+      const { nombreCompleto, correo, mensaje } = req.body;
 
-    console.log("Cuerpo de la solicitud:", req.body);
+      console.log("Cuerpo de la solicitud:", req.body);
 
-    if (!nombreCompleto || !correo || !mensaje) {
-      return res.status(400).send({ message: "Todos los campos son obligatorios" });
-    }
+      if (!nombreCompleto || !correo || !mensaje) {
+          return res.status(400).send({ message: 'Todos los campos son obligatorios' });
+      }
 
-    const database = client.db("tareaDSI");
-    const collection = database.collection("contacts");
+      const database = client.db("tareaDSI");
+      const collection = database.collection("contacts");
 
-    const result = await collection.insertOne({ nombreCompleto, correo, mensaje });
-
-    res.status(201).send({ message: "Mensaje recibido", data: result });
+      const result = await collection.insertOne({ nombreCompleto, correo, mensaje });
+      
+      res.status(201).send({ message: 'Mensaje recibido', data: result });
   } catch (error) {
-    console.error("Error al guardar el mensaje:", error);
-    res.status(500).send({ message: "Error al guardar el mensaje", error: error.message });
+      console.error("Error al guardar el mensaje:", error);
+      res.status(500).send({ message: 'Error al guardar el mensaje', error: error.message });
   }
 });
+
 
 app.get("/", (req, res) => {
   res.send("¡Hola, mundo!");
