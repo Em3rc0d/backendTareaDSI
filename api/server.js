@@ -17,6 +17,7 @@ app.use(express.json());
 
 const uri =
   "mongodb+srv://farid:emerc0d@cluster0.sguno.mongodb.net/tareaDSI?retryWrites=true&w=majority&appName=Cluster0&tls=true";
+
 let client;
 let isConnected = false;
 
@@ -45,33 +46,25 @@ async function connectToMongoDB() {
 
 app.post("/contact", async (req, res) => {
   try {
-    await connectToMongoDB();
+    await connectToMongoDB(); // Asegúrate de que la conexión esté activa
 
     const { nombreCompleto, correo, mensaje } = req.body;
 
     console.log("Cuerpo de la solicitud:", req.body);
 
     if (!nombreCompleto || !correo || !mensaje) {
-      return res
-        .status(400)
-        .send({ message: "Todos los campos son obligatorios" });
+      return res.status(400).send({ message: "Todos los campos son obligatorios" });
     }
 
     const database = client.db("tareaDSI");
     const collection = database.collection("contacts");
 
-    const result = await collection.insertOne({
-      nombreCompleto,
-      correo,
-      mensaje,
-    });
+    const result = await collection.insertOne({ nombreCompleto, correo, mensaje });
 
     res.status(201).send({ message: "Mensaje recibido", data: result });
   } catch (error) {
     console.error("Error al guardar el mensaje:", error);
-    res
-      .status(500)
-      .send({ message: "Error al guardar el mensaje", error: error.message });
+    res.status(500).send({ message: "Error al guardar el mensaje", error: error.message });
   }
 });
 
@@ -83,8 +76,10 @@ app.get("/try", (req, res) => {
   res.send("Hi");
 });
 
+// Exportar la aplicación para que Vercel pueda usarla
 module.exports = app;
 
+// Conectar a MongoDB y iniciar el servidor localmente si no está en Vercel
 if (require.main === module) {
   connectToMongoDB()
     .then(() => {
