@@ -1,8 +1,14 @@
 const express = require('express');
 const { MongoClient, ServerApiVersion } = require('mongodb');
+const cors = require('cors'); // Importa cors
 
 const app = express();
 const port = process.env.PORT || 3000; // Cambiar a process.env.PORT
+
+// Middleware para permitir solicitudes CORS
+app.use(cors({
+    origin: 'https://tarea-dsi.vercel.app' // Cambia esto por la URL de tu frontend
+}));
 
 // Middleware para parsear JSON
 app.use(express.json());
@@ -58,4 +64,12 @@ app.get('/try', (req, res) => {
 // Exportar la aplicación para que Vercel pueda usarla
 module.exports = app; 
 
-// No inicies el servidor directamente aquí para que funcione en Vercel
+// Conectar a MongoDB y iniciar el servidor localmente si no está en Vercel
+if (require.main === module) {
+    connectToMongoDB()
+        .then(() => {
+            app.listen(port, () => {
+                console.log(`Servidor escuchando en http://localhost:${port}`);
+            });
+        });
+}
