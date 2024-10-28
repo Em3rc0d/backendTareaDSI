@@ -7,7 +7,9 @@ const port = process.env.PORT || 3000; // Cambiar a process.env.PORT
 
 // Middleware para permitir solicitudes CORS
 app.use(cors({
-    origin: 'https://tarea-dsi.vercel.app' // Cambia esto por la URL de tu frontend
+    origin: 'https://tarea-dsi.vercel.app', // Cambia esto por la URL de tu frontend
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true
 }));
 
 // Middleware para parsear JSON
